@@ -1,0 +1,64 @@
+version: '3.9'
+
+services:
+  # ── PostgreSQL ──────────────────────────────────────────────────────
+  db:
+    image: postgres:15-alpine
+    container_name: rapidcare-db
+    environment:
+      POSTGRES_USER: rapidcare
+      POSTGRES_PASSWORD: rapidcare123
+      POSTGRES_DB: rapidcare_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rapidcare -d rapidcare_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis ───────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: rapidcare-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ── FastAPI Backend ─────────────────────────────────────────────────
+  backend:
+    build: ./backend
+    container_name: rapidcare-backend
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://rapidcare:rapidcare123@db:5432/rapidcare_db
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── React Frontend ──────────────────────────────────────────────────
+  frontend:
+    build: ./frontend
+    container_name: rapidcare-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  pg_data:
