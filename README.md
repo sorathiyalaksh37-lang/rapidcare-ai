@@ -14,7 +14,7 @@
 
 **A production-grade AI system that guides bystanders during road accidents and medical emergencies through intelligent multi-modal analysis, real-time first-aid guidance, and hospital routing.**
 
-[🚀 Quick Start](#-quick-start) · [🏗️ Architecture](#️-architecture) · [🤖 AI Pipeline](#-ai-pipeline) · [📡 API Reference](#-api-reference) · [🐳 Docker](#-docker-deployment)
+[🚀 Quick Start](#-quick-start) · [🏗️ Architecture](#️-architecture) · [🤖 AI Pipeline](#-ai-pipeline) · [📡 API Reference](#-api-reference) · [🐳 Docker](#-docker-deployment) · [📊 Datasets](DATASETS.md) · [🧠 Technical Deep Dive](TECHNICAL.md)
 
 </div>
 

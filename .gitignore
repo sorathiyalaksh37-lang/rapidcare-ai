@@ -1,0 +1,72 @@
+# ── Python ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# ── Node / Frontend ───────────────────────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/build/
+.npm/
+
+# ── Environment variables (NEVER commit secrets) ──────────────────────
+.env
+backend/.env
+
+# ── Database files ────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+backend/*.db
+
+# ── Logs ─────────────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── AI Model cache (large files) ──────────────────────────────────────
+backend/models_cache/
+*.pt
+*.pth
+*.bin
+*.ckpt
+whisper_models/
+yolo_models/
+
+# ── Uploads / temp files ──────────────────────────────────────────────
+backend/uploads/
+backend/temp/
+*.tmp
+
+# ── OS files ──────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── Test artifacts ────────────────────────────────────────────────────
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# ── Docker ───────────────────────────────────────────────────────────
+*.dockerignore
