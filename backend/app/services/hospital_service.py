@@ -141,12 +141,25 @@ async def find_nearest_hospitals(
             h["specialty_match"] = _specialty_match_score(h.get("specialties", []), required_specialties)
             hospitals_raw.append(h)
 
-    # Sort: weighted score (lower distance better, higher specialty match better)
+    # Sort: distance is PRIMARY factor (0-100 pts), specialty & ICU are tiebreakers
     def score(h):
-        dist_score = 1 / (h["distance_km"] + 0.1)
-        spec_score = h.get("specialty_match", 0.5) * 2
-        icu_score = min(h.get("icu_beds_available", 0) / 100, 1.0)
-        return dist_score + spec_score + icu_score
+        distance = h["distance_km"]
+
+        # Distance score: exponential decay — nearby hospitals win overwhelmingly
+        # 0-5 km = 100 pts, 5-15 km = 70 pts, 15-30 km = 40 pts, 30-60 km = 15 pts, 60+ km = <5 pts
+        import math
+        dist_score = 100 * math.exp(-distance / 15.0)
+
+        # Specialty match: bonus up to 20 pts
+        spec_score = h.get("specialty_match", 0.5) * 20
+
+        # ICU availability: bonus up to 10 pts
+        icu_score = min(h.get("icu_beds_available", 0) / 15, 10)
+
+        # Rating: bonus up to 5 pts
+        rating_score = h.get("rating", 4.0)
+
+        return dist_score + spec_score + icu_score + rating_score
 
     hospitals_raw.sort(key=score, reverse=True)
     return hospitals_raw[:limit]
