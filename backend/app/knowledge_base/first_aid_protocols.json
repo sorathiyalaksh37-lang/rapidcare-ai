@@ -1,0 +1,188 @@
+{
+  "protocols": [
+    {
+      "id": "road_accident",
+      "emergency_type": "road_accident",
+      "title": "Road Accident First Aid",
+      "description": "General protocol for road traffic accident victims",
+      "keywords": ["accident", "crash", "collision", "vehicle", "car", "bike", "truck", "road", "hit", "knocked"],
+      "steps": [
+        "🚨 ENSURE SAFETY: Check for oncoming traffic before approaching. Switch on hazard lights of nearby vehicles.",
+        "📞 CALL 112: Immediately call emergency services (112). State location, number of victims, visible injuries.",
+        "⚠️ DO NOT MOVE victim unless they are in immediate danger (fire/sinking vehicle). Spinal injuries may worsen.",
+        "🫁 CHECK BREATHING: Look, listen, feel for breathing for 10 seconds. If absent, begin CPR.",
+        "🩸 CONTROL BLEEDING: Apply firm, direct pressure using clean cloth. Do NOT remove embedded objects.",
+        "🧠 MONITOR CONSCIOUSNESS: Talk to the victim, keep them calm and awake. Note any loss of consciousness.",
+        "🌡️ PREVENT SHOCK: Lay victim flat (unless spinal injury suspected), elevate legs 30cm if no leg/spinal injury.",
+        "🚑 AWAIT AMBULANCE: Do not give food or water. Keep victim warm. Stay until help arrives."
+      ],
+      "warnings": [
+        "⚠️ Do NOT remove helmets unless airway is blocked — neck injuries are common",
+        "⚠️ Do NOT give pain medication without medical guidance",
+        "⚠️ Do NOT leave the victim alone"
+      ],
+      "required_specialties": ["trauma"]
+    },
+    {
+      "id": "cardiac_arrest",
+      "emergency_type": "cardiac_arrest",
+      "title": "Cardiac Arrest / Heart Attack",
+      "description": "Protocol for cardiac arrest and heart attack emergencies",
+      "keywords": ["heart", "cardiac", "chest pain", "heart attack", "collapsed", "unconscious", "not breathing", "clutching chest"],
+      "steps": [
+        "📞 CALL 112 IMMEDIATELY: Cardiac emergencies are time-critical — every minute counts.",
+        "🫁 START CPR: Place heel of hand on centre of chest, push hard & fast (100-120 compressions/min, 5cm deep).",
+        "💨 GIVE RESCUE BREATHS: After 30 compressions, give 2 rescue breaths (tilt head, lift chin, seal mouth).",
+        "🔋 USE AED IF AVAILABLE: Turn on Automated External Defibrillator, follow voice prompts.",
+        "🔄 CONTINUE CPR: Do not stop until emergency services arrive or victim shows signs of life.",
+        "💊 ASPIRIN: If victim is conscious and not allergic, give 300mg aspirin to chew (not swallow whole).",
+        "🛋️ POSITION: Sit patient upright or in most comfortable position. Loosen tight clothing.",
+        "😌 KEEP CALM: Reduce patient's anxiety — stress worsens cardiac events."
+      ],
+      "warnings": [
+        "⚠️ Survival drops 10% per minute without CPR — start immediately",
+        "⚠️ Do NOT leave victim alone even for a moment",
+        "⚠️ Do NOT give food or water"
+      ],
+      "required_specialties": ["cardiac"]
+    },
+    {
+      "id": "stroke",
+      "emergency_type": "stroke",
+      "title": "Stroke Emergency",
+      "description": "Protocol for suspected stroke — FAST protocol",
+      "keywords": ["stroke", "slurred speech", "drooping face", "arm weakness", "sudden confusion", "sudden headache", "vision loss"],
+      "steps": [
+        "🔍 USE FAST TEST: Face drooping? Arm weakness? Speech difficulty? Time to call 112!",
+        "📞 CALL 112 IMMEDIATELY: Note exact time symptoms started — critical for treatment decisions.",
+        "🛋️ POSITION: Lay victim on their side if unconscious or vomiting. Keep head slightly elevated.",
+        "⏱️ NOTE TIME: Record exactly when symptoms first appeared — determines treatment eligibility.",
+        "🚫 DO NOT give food, water, or medication — swallowing may be impaired.",
+        "🧊 DO NOT apply ice or heat to the affected area.",
+        "😌 KEEP CALM: Reassure victim, keep them still and comfortable.",
+        "🔄 MONITOR: Watch for breathing changes, loss of consciousness, or seizures until help arrives."
+      ],
+      "warnings": [
+        "⚠️ Stroke treatment window is 3-4.5 hours — get to hospital FAST",
+        "⚠️ Do NOT give aspirin for stroke (it can worsen bleeding strokes)",
+        "⚠️ Do NOT let the victim 'sleep it off'"
+      ],
+      "required_specialties": ["neurology"]
+    },
+    {
+      "id": "bleeding",
+      "emergency_type": "bleeding",
+      "title": "Severe Bleeding Control",
+      "description": "Protocol for controlling serious external bleeding",
+      "keywords": ["bleeding", "blood", "wound", "cut", "laceration", "gash", "hemorrhage", "stabbed"],
+      "steps": [
+        "🧤 PROTECT YOURSELF: Use gloves or plastic bag if available to avoid blood-borne infections.",
+        "🤲 DIRECT PRESSURE: Place clean cloth or bandage firmly over wound. Press continuously for 10 minutes.",
+        "⏫ ELEVATE: If no fracture suspected, raise the injured limb above heart level.",
+        "🎗️ TOURNIQUET (Limb only): If bleeding is life-threatening from arm/leg, apply tourniquet 5cm above wound. Note time applied.",
+        "🚫 DO NOT remove the cloth if it soaks through — add more on top and keep pressing.",
+        "📞 CALL 112: All severe bleeding requires emergency medical attention.",
+        "🌡️ PREVENT SHOCK: Keep victim warm, lying down. Elevate legs if no spinal/leg injury.",
+        "💬 REASSURE: Keep victim calm — anxiety increases heart rate and blood loss."
+      ],
+      "warnings": [
+        "⚠️ Do NOT remove embedded objects from wounds",
+        "⚠️ Do NOT use tourniquet on neck, chest, or abdomen",
+        "⚠️ Never remove tourniquet once applied — only medical staff should do this"
+      ],
+      "required_specialties": ["trauma"]
+    },
+    {
+      "id": "fracture",
+      "emergency_type": "fracture",
+      "title": "Bone Fracture First Aid",
+      "description": "Protocol for suspected bone fractures and broken bones",
+      "keywords": ["fracture", "broken bone", "bone", "cant move", "swollen limb", "deformity", "cracked"],
+      "steps": [
+        "🛑 IMMOBILIZE: Do NOT attempt to straighten the bone. Support it in the position found.",
+        "📏 SPLINT: Use rigid material (stick, rolled newspaper) padded with cloth. Extend splint beyond joints above and below fracture.",
+        "🧊 ICE: Apply ice pack (wrapped in cloth) to reduce swelling. Never apply ice directly to skin.",
+        "📞 CALL 112 if: Open fracture, spinal/hip/pelvis fracture, severe pain, significant deformity, or loss of sensation.",
+        "🩸 OPEN FRACTURE: Cover wound with clean dressing. Do NOT push bone back in.",
+        "⚡ CHECK CIRCULATION: Check pulse, sensation, and movement below the fracture site.",
+        "🔄 MONITOR: Watch for shock symptoms — pale, cold, clammy skin, rapid breathing.",
+        "🚫 DO NOT give food or water — surgery may be needed."
+      ],
+      "warnings": [
+        "⚠️ NEVER try to realign or straighten broken bone",
+        "⚠️ Suspected spinal fracture — do NOT move victim at all",
+        "⚠️ Open fractures carry high infection risk — keep wound covered"
+      ],
+      "required_specialties": ["orthopedic", "trauma"]
+    },
+    {
+      "id": "burn",
+      "emergency_type": "fire_burn",
+      "title": "Burn Injury First Aid",
+      "description": "Protocol for thermal, chemical, and electrical burns",
+      "keywords": ["burn", "fire", "flame", "scald", "hot", "chemical burn", "acid", "electric shock"],
+      "steps": [
+        "🔥 REMOVE HEAT SOURCE: Stop the burning process — remove from fire, chemical contact, or electrical source.",
+        "💧 COOL THE BURN: Run cool (not cold/ice) water over burn for 20 FULL MINUTES. Do NOT use ice.",
+        "📞 CALL 112: For burns larger than palm size, burns to face/hands/genitals/joints, or all chemical/electrical burns.",
+        "🚫 DO NOT: Apply butter, toothpaste, oil, or home remedies. Do NOT burst blisters.",
+        "🎁 COVER: Loosely cover with clean non-fluffy material (cling film or clean plastic bag). Do NOT wrap tightly.",
+        "💊 PAIN RELIEF: Paracetamol or ibuprofen can be given if victim is conscious and has no allergies.",
+        "🌡️ PREVENT SHOCK: Keep victim warm except for burned area. Lay down, elevate legs.",
+        "💧 HYDRATION: If conscious and minor burn, encourage small sips of water."
+      ],
+      "warnings": [
+        "⚠️ NEVER use ice — it causes further tissue damage",
+        "⚠️ Chemical burns — brush off dry chemicals before water irrigation",
+        "⚠️ Electrical burns — ensure power source is OFF before touching victim"
+      ],
+      "required_specialties": ["burn", "trauma"]
+    },
+    {
+      "id": "drowning",
+      "emergency_type": "drowning",
+      "title": "Drowning Emergency",
+      "description": "Protocol for near-drowning and water rescue",
+      "keywords": ["drowning", "water", "submerged", "pool", "river", "lake", "sea", "not breathing", "rescue"],
+      "steps": [
+        "🆘 CALL FOR HELP: Call 112 immediately. Do NOT enter water unless trained.",
+        "🪢 REACH OR THROW: Use rope, stick, or flotation device to reach victim. Do NOT swim to victim unless trained.",
+        "🏖️ REMOVAL: Remove victim from water. Be careful of potential spinal injury if they fell/dived.",
+        "🫁 CHECK BREATHING: Tilt head back, lift chin, check for 10 seconds. Begin CPR if not breathing.",
+        "🔁 CPR: 30 chest compressions followed by 2 rescue breaths. Do NOT stop.",
+        "👤 RECOVERY POSITION: If breathing, place in recovery position (on their side).",
+        "🌡️ HYPOTHERMIA: Remove wet clothing, cover with blankets. Hypothermia is a risk even in warm weather.",
+        "🏥 HOSPITAL: All drowning victims need medical evaluation even if they seem recovered."
+      ],
+      "warnings": [
+        "⚠️ Secondary drowning can occur hours later — always get medical evaluation",
+        "⚠️ Victim may vomit during CPR — turn head to side briefly",
+        "⚠️ Do NOT hold victim upside down to remove water"
+      ],
+      "required_specialties": ["trauma", "cardiac"]
+    },
+    {
+      "id": "head_injury",
+      "emergency_type": "head_injury",
+      "title": "Head Injury First Aid",
+      "description": "Protocol for traumatic brain injury and head wounds",
+      "keywords": ["head injury", "head wound", "concussion", "skull", "hit head", "head trauma", "unconscious hit"],
+      "steps": [
+        "📞 CALL 112: All head injuries should be evaluated by medical professionals.",
+        "🛑 IMMOBILIZE HEAD & NECK: Keep victim still. Support head in position found if spinal injury suspected.",
+        "🩸 CONTROL BLEEDING: Apply firm pressure around (not on) skull wounds. Use clean cloth.",
+        "👁️ MONITOR CONSCIOUSNESS: Use AVPU scale — Alert, Voice response, Pain response, Unresponsive.",
+        "🔍 WATCH FOR DANGER SIGNS: Repeated vomiting, seizures, unequal pupils, increasing headache, confusion.",
+        "🚫 DO NOT: Give pain medication (masks symptoms), give food/water, leave alone.",
+        "👤 RECOVERY POSITION: Only if victim is unconscious and breathing with no spinal injury suspected.",
+        "💬 KEEP AWAKE: Talk to victim, but do NOT let them sleep until medically assessed."
+      ],
+      "warnings": [
+        "⚠️ Intracranial bleeding can develop slowly — symptoms worsen over hours",
+        "⚠️ NEVER remove helmet if neck/spinal injury suspected",
+        "⚠️ Confusion, amnesia, or loss of consciousness = serious injury regardless of appearance"
+      ],
+      "required_specialties": ["neurology", "trauma"]
+    }
+  ]
+}
