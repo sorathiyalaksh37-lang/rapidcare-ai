@@ -1,5 +1,9 @@
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+from pathlib import Path
+
+# Look for .env in backend dir OR one level up (project root)
+_ENV_FILE = ".env" if Path(".env").exists() else str(Path(__file__).parent.parent.parent / ".env")
 
 
 class Settings(BaseSettings):
@@ -11,7 +15,7 @@ class Settings(BaseSettings):
     allowed_origins: str = "http://localhost:5173,http://localhost:3000"
 
     # Database
-    database_url: str = "postgresql+asyncpg://rapidcare:rapidcare123@localhost:5432/rapidcare_db"
+    database_url: str = "sqlite+aiosqlite:///./rapidcare.db"
 
     # Redis
     redis_url: str = "redis://localhost:6379"
@@ -29,7 +33,7 @@ class Settings(BaseSettings):
         return [o.strip() for o in self.allowed_origins.split(",")]
 
     class Config:
-        env_file = ".env"
+        env_file = _ENV_FILE
         env_file_encoding = "utf-8"
 
 
