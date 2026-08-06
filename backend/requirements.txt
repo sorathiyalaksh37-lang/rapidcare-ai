@@ -6,11 +6,12 @@ websockets==12.0
 # Database
 sqlalchemy==2.0.30
 asyncpg==0.29.0
+aiosqlite==0.20.0
 alembic==1.13.1
 psycopg2-binary==2.9.9
 
 # Cache
-redis==5.0.4
+redis[hiredis]==5.0.4
 aioredis==2.0.1
 
 # AI / ML
@@ -22,9 +23,18 @@ ultralytics==8.2.18
 scikit-learn==1.5.0
 numpy==1.26.4
 scipy==1.13.0
+onnxruntime==1.18.0
 
 # NLP utilities
 nltk==3.8.1
+
+# Geocoding & Location
+geopy==2.4.1
+
+# HTTP & Retry
+httpx==0.27.0
+aiohttp==3.9.5
+tenacity==8.3.0
 
 # Report generation
 reportlab==4.1.0
@@ -34,10 +44,6 @@ jinja2==3.1.4
 Pillow==10.3.0
 opencv-python-headless==4.9.0.80
 
-# HTTP
-httpx==0.27.0
-aiohttp==3.9.5
-
 # Env / Config
 python-dotenv==1.0.1
 pydantic==2.7.1
@@ -46,4 +52,3 @@ pydantic-settings==2.3.1
 # Dev / Testing
 pytest==8.2.1
 pytest-asyncio==0.23.7
-httpx==0.27.0
