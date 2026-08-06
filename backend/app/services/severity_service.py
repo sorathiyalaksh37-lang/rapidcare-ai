@@ -14,7 +14,6 @@ Input features (50 total):
   - Time of day, etc.
 """
 import logging
-import re
 from typing import Optional
 from app.config import get_settings
 
@@ -91,8 +90,6 @@ def _build_feature_vector(
     severity_score: float,
 ) -> "list[float]":
     """Build 50-dimensional feature vector for survival predictor."""
-    import numpy as np
-
     features = []
 
     # Emergency type one-hot (9)
