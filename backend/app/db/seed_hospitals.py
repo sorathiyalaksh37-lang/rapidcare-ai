@@ -3,7 +3,6 @@ Seed the hospitals table with 50 real-ish Indian hospitals.
 Run: python -m app.db.seed_hospitals
 """
 import asyncio
-import json
 from app.db.database import AsyncSessionLocal, init_db
 from app.models.hospital import Hospital
 

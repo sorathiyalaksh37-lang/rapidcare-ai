@@ -6,7 +6,7 @@ Endpoints:
   POST /api/location/geocode — address → coordinates
   GET  /api/location/bounds  — India bounding box info
 """
-from fastapi import APIRouter, Request, Query
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
 from typing import Optional
 from app.services.location_service import detect_location, geocode_address

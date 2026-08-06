@@ -9,10 +9,9 @@ Endpoints:
 """
 from fastapi import APIRouter, Path, HTTPException
 from pydantic import BaseModel
-from typing import Optional, Any
+from typing import Optional
 from app.services.availability_service import (
     get_hospital_availability,
-    get_bulk_availability,
     update_hospital_availability,
     get_availability_summary,
 )

@@ -3,11 +3,9 @@ RapidCare AI — FastAPI Application Entry Point (Phase 1 Enhanced)
 """
 import asyncio
 import logging
-import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
 from app.db.database import init_db
@@ -36,7 +34,6 @@ async def lifespan(app: FastAPI):
 
     # ── Hospital cache warm-up (Task 1) ──────────────────────────────────
     try:
-        from app.services.hospital_cache import refresh_hospital_cache
         # Non-blocking: start refresh in background, don't wait for it
         _bg_tasks.append(
             asyncio.create_task(

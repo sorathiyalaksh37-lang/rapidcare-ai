@@ -8,9 +8,7 @@ Mode hierarchy:
 
 ONNX model is the trained DistilBERT/MIETIC output from Task 7.
 """
-import re
 import logging
-from typing import Optional
 from app.config import get_settings
 
 settings = get_settings()

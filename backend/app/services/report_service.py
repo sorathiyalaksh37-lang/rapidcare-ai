@@ -1,11 +1,9 @@
 """
 Report Service: Generates structured emergency reports in JSON and PDF.
 """
-import json
-import os
 import uuid
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict, Any
 from pathlib import Path
 
 REPORTS_DIR = Path("/tmp/rapidcare_reports")
@@ -100,7 +98,7 @@ def generate_pdf_report(report: dict) -> Optional[str]:
     try:
         from reportlab.lib.pagesizes import A4
         from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-        from reportlab.lib.colors import HexColor, red, black, white
+        from reportlab.lib.colors import HexColor, white
         from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
         from reportlab.lib.units import cm
         from reportlab.lib.enums import TA_CENTER, TA_LEFT

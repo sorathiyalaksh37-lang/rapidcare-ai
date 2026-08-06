@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Float, Integer, DateTime, JSON, Text, Enum
+from sqlalchemy import Column, String, Float, Integer, DateTime, JSON, Text
 from sqlalchemy.sql import func
 import enum
 import uuid

@@ -3,7 +3,6 @@ First-Aid Service: Retrieves relevant first-aid protocols using TF-IDF RAG.
 Matches emergency type and text context to knowledge base entries.
 """
 import json
-import os
 from typing import Optional
 from pathlib import Path
 

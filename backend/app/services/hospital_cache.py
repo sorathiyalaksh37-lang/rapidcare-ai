@@ -50,7 +50,6 @@ async def get_cached_hospitals() -> list[dict[str, Any]]:
       2. In-process memory — valid for 1 hour if Redis down
       3. Static fallback JSON — always available
     """
-    global _in_memory_cache, _cache_loaded_at
 
     # Try Redis first
     redis = await _get_redis()

@@ -1,7 +1,6 @@
 """
 Emergency Analysis API routes.
 """
-import json
 from fastapi import APIRouter, File, UploadFile, Form, Depends, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse
 from typing import Optional

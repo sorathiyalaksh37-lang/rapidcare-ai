@@ -22,8 +22,6 @@ from __future__ import annotations
 import asyncio
 import math
 import logging
-from typing import Optional
-
 logger = logging.getLogger(__name__)
 
 # ── Specialty synonym expansion ──────────────────────────────────────────────
