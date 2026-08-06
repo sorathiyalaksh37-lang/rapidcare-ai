@@ -127,12 +127,13 @@ async def _layer1_gps(lat: float, lon: float) -> dict | None:
         logger.debug("GPS coords outside India: %s, %s", lat, lon)
         # Still return even if outside India (international support)
 
-    city, state = await _reverse_geocode(lat, lon)
+    # Skip reverse-geocode for GPS input — coordinates are already precise
+    # and Nominatim adds 1-3s of latency. City/state can be resolved later.
     return {
         "latitude": lat,
         "longitude": lon,
-        "city": city,
-        "state": state,
+        "city": "",
+        "state": "",
         "country": "India",
         "accuracy_m": 10,
         "layer": 1,
@@ -148,7 +149,7 @@ async def _layer2_google_wifi(api_key: str) -> dict | None:
             async with session.post(
                 url,
                 json={"considerIp": True},
-                timeout=aiohttp.ClientTimeout(total=3),
+                timeout=aiohttp.ClientTimeout(total=2),
             ) as resp:
                 data = await resp.json()
         loc = data.get("location", {})
@@ -196,7 +197,7 @@ async def _layer3_ip_geolocation(ip: str) -> dict | None:
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 f"https://ipinfo.io/{ip}/json",
-                timeout=aiohttp.ClientTimeout(total=3),
+                timeout=aiohttp.ClientTimeout(total=2),
             ) as resp:
                 data = await resp.json()
         loc_str = data.get("loc", "")

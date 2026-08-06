@@ -217,21 +217,33 @@ async def find_nearest_hospitals(
     # ── Fetch hospital pool ──────────────────────────────────────────────
     hospitals_raw = await _load_hospitals(latitude, longitude, db)
 
-    # ── Fetch async enhancements (traffic, availability, acceptance) ──────
-    traffic_etas, availability_data, acceptance_rates = await asyncio.gather(
-        _get_traffic_etas(latitude, longitude, hospitals_raw[:50]),  # top 50 candidates
-        _get_availability_data(hospitals_raw[:50]),
-        _get_acceptance_rates(hospitals_raw[:50]),
-        return_exceptions=True,
-    )
+    # Pre-compute distances so we can pre-filter to nearest 20 before network calls
+    for h in hospitals_raw:
+        if "distance_km" not in h:
+            h["distance_km"] = round(_haversine(latitude, longitude, h["latitude"], h["longitude"]), 2)
+    hospitals_raw.sort(key=lambda h: h["distance_km"])
+    candidates = hospitals_raw[:20]  # only enrich nearest 20 hospitals
+
+    # ── Fetch async enhancements with a global 2-second timeout ──────────
+    try:
+        traffic_etas, availability_data, acceptance_rates = await asyncio.wait_for(
+            asyncio.gather(
+                _get_traffic_etas(latitude, longitude, candidates),
+                _get_availability_data(candidates),
+                _get_acceptance_rates(candidates),
+                return_exceptions=True,
+            ),
+            timeout=2.0,
+        )
+    except asyncio.TimeoutError:
+        logger.warning("Enhancement calls timed out — using haversine ETAs")
+        traffic_etas, availability_data, acceptance_rates = {}, {}, {}
     traffic_etas = traffic_etas if isinstance(traffic_etas, dict) else {}
     availability_data = availability_data if isinstance(availability_data, dict) else {}
     acceptance_rates = acceptance_rates if isinstance(acceptance_rates, dict) else {}
 
-    # ── Compute distances and add to each hospital ────────────────────────
+    # ── Add ETA to all hospitals (traffic for top-20, haversine for rest) ──
     for h in hospitals_raw:
-        if "distance_km" not in h:
-            h["distance_km"] = round(_haversine(latitude, longitude, h["latitude"], h["longitude"]), 2)
         naive_min = h["distance_km"] / 40.0 * 60.0
         h["estimated_travel_min"] = max(int(traffic_etas.get(h.get("id", ""), naive_min)), 3)
 
@@ -368,17 +380,23 @@ async def _get_availability_data(hospitals: list[dict]) -> dict[str, dict]:
 
 
 async def _get_acceptance_rates(hospitals: list[dict]) -> dict[str, float]:
-    """Get historical acceptance rates from Redis."""
+    """Get historical acceptance rates from Redis using a single pipeline call."""
     try:
         import redis.asyncio as aioredis
         from app.config import get_settings
-        r = aioredis.from_url(get_settings().redis_url, decode_responses=True, socket_timeout=1)
-        rates = {}
+        r = aioredis.from_url(
+            get_settings().redis_url, decode_responses=True,
+            socket_timeout=0.5, socket_connect_timeout=0.5,
+        )
+        pipe = r.pipeline()
         for h in hospitals:
-            val = await r.get(f"rapidcare:acceptance:{h['id']}")
+            pipe.get(f"rapidcare:acceptance:{h['id']}")
+        values = await pipe.execute()
+        await r.aclose()
+        rates = {}
+        for h, val in zip(hospitals, values):
             if val:
                 rates[h["id"]] = float(val)
-        await r.aclose()
         return rates
     except Exception:
         return {}

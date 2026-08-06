@@ -5,28 +5,11 @@ websockets==12.0
 
 # Database
 sqlalchemy==2.0.30
-asyncpg==0.29.0
 aiosqlite==0.20.0
 alembic==1.13.1
-psycopg2-binary==2.9.9
 
 # Cache
 redis[hiredis]==5.0.4
-aioredis==2.0.1
-
-# AI / ML
-torch==2.3.0
-torchvision==0.18.0
-transformers==4.41.1
-openai-whisper==20231117
-ultralytics==8.2.18
-scikit-learn==1.5.0
-numpy==1.26.4
-scipy==1.13.0
-onnxruntime==1.18.0
-
-# NLP utilities
-nltk==3.8.1
 
 # Geocoding & Location
 geopy==2.4.1
@@ -37,12 +20,11 @@ aiohttp==3.9.5
 tenacity==8.3.0
 
 # Report generation
-reportlab==4.1.0
+reportlab==4.2.5
 jinja2==3.1.4
 
-# Image processing
-Pillow==10.3.0
-opencv-python-headless==4.9.0.80
+# Image processing — pinned to version with Python 3.13 wheels
+Pillow==11.1.0
 
 # Env / Config
 python-dotenv==1.0.1
