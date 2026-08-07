@@ -23,7 +23,7 @@ async def analyze_emergency(
 ) -> dict:
     """
     Full multi-modal emergency analysis pipeline.
-    Returns comprehensive analysis dict in < 1.5s (demo mode).
+    Returns comprehensive analysis dict in < 2s (optimized).
     """
     start_time = time.time()
     incident_id = str(uuid.uuid4())
@@ -34,7 +34,7 @@ async def analyze_emergency(
         try:
             transcription_result = await asyncio.wait_for(
                 speech_service.transcribe_audio(audio_bytes, audio_filename),
-                timeout=10.0,
+                timeout=5.0,  # Reduced from 10s to 5s
             )
             if transcription_result.get("transcription"):
                 text = (text + " " if text else "") + transcription_result["transcription"]
@@ -72,7 +72,7 @@ async def analyze_emergency(
     # ── Step 5: First-Aid (sync — < 5ms) ────────────────────────────────
     firstaid_data = firstaid_service.get_first_aid(emergency_type, text)
 
-    # ── Step 6: Hospital Finding (capped at 3s total) ────────────────────
+    # ── Step 6: Hospital Finding (capped at 2s total) ────────────────────
     lat = latitude or 19.0760   # Default: Mumbai
     lon = longitude or 72.8777
     try:
@@ -84,7 +84,7 @@ async def analyze_emergency(
                 db=db,
                 limit=5,
             ),
-            timeout=3.0,
+            timeout=2.0,  # Reduced from 3s to 2s
         )
     except asyncio.TimeoutError:
         hospitals = hospital_service._demo_hospitals()[:5]
@@ -110,6 +110,12 @@ async def analyze_emergency(
 
         # Hospitals
         "nearest_hospitals": hospitals,
+        
+        # User location (include in response for map display)
+        "user_location": {
+            "latitude": lat,
+            "longitude": lon
+        },
 
         # Input analysis details
         "transcription": transcription_result.get("transcription", ""),

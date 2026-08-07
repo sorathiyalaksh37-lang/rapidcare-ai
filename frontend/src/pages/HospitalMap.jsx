@@ -41,7 +41,13 @@ export default function HospitalMap({ result }) {
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
   const hospitals = result?.nearest_hospitals || [];
-  const userPos = { lat: 19.0760, lng: 72.8777 };
+  
+  // Use actual user location from result, or fallback to first hospital, or Mumbai as last resort
+  const userPos = result?.user_location 
+    ? { lat: result.user_location.latitude, lng: result.user_location.longitude }
+    : hospitals.length > 0 
+    ? { lat: hospitals[0].latitude - 0.01, lng: hospitals[0].longitude - 0.01 } // Offset from first hospital
+    : { lat: 19.0760, lng: 72.8777 }; // Default Mumbai
 
   return (
     <div className="page animate-fade-up">

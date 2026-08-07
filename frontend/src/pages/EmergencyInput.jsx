@@ -22,6 +22,8 @@ export default function EmergencyInput({ onResult }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [location, setLocation] = useState(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const [analysisProgress, setAnalysisProgress] = useState('');
 
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -30,10 +32,36 @@ export default function EmergencyInput({ onResult }) {
   // ── Location ──────────────────────────────────────────────────────────
   const getLocation = useCallback(() => {
     if (navigator.geolocation) {
+      setIsLoadingLocation(true);
+      setError('');
       navigator.geolocation.getCurrentPosition(
-        pos => setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        () => setLocation({ lat: 19.0760, lng: 72.8777 }) // Default Mumbai
+        pos => {
+          setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+          setIsLoadingLocation(false);
+        },
+        (err) => {
+          setIsLoadingLocation(false);
+          let errorMsg = 'Location access failed: ';
+          if (err.code === err.PERMISSION_DENIED) {
+            errorMsg += 'Please enable location permissions in your browser settings.';
+          } else if (err.code === err.POSITION_UNAVAILABLE) {
+            errorMsg += 'Location information is unavailable. Using default location.';
+          } else if (err.code === err.TIMEOUT) {
+            errorMsg += 'Location request timed out. Using default location.';
+          }
+          setError(errorMsg);
+          // Only use default as last resort
+          setLocation({ lat: 19.0760, lng: 72.8777 }); // Default Mumbai
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
       );
+    } else {
+      setError('Geolocation is not supported by your browser.');
+      setLocation({ lat: 19.0760, lng: 72.8777 }); // Default Mumbai
     }
   }, []);
 
@@ -86,9 +114,16 @@ export default function EmergencyInput({ onResult }) {
     }
     setError('');
     setIsLoading(true);
+    setAnalysisProgress('Starting analysis...');
 
     try {
       const audioFile = audioBlob ? new File([audioBlob], 'audio.webm', { type: 'audio/webm' }) : null;
+      
+      // Simulate progress updates
+      setTimeout(() => setAnalysisProgress('Processing inputs...'), 500);
+      setTimeout(() => setAnalysisProgress('Analyzing emergency type...'), 1500);
+      setTimeout(() => setAnalysisProgress('Finding nearby hospitals...'), 3000);
+      
       const result = await analyzeEmergency({
         text: text || undefined,
         image: image || undefined,
@@ -96,12 +131,16 @@ export default function EmergencyInput({ onResult }) {
         latitude: location?.lat,
         longitude: location?.lng,
       });
+      
+      setAnalysisProgress('Complete!');
       onResult(result);
       navigate('/dashboard');
     } catch (err) {
+      setAnalysisProgress('');
       setError(err.response?.data?.detail || 'Analysis failed. Please check if the backend is running.');
     } finally {
       setIsLoading(false);
+      setTimeout(() => setAnalysisProgress(''), 500);
     }
   };
 
@@ -214,8 +253,24 @@ export default function EmergencyInput({ onResult }) {
 
         {/* Location */}
         <div style={{ marginBottom: '28px' }}>
-          <button className="btn btn-ghost btn-sm" onClick={getLocation}>
-            📍 {location ? `Location: ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}` : 'Use My Location'}
+          <button 
+            className="btn btn-ghost btn-sm" 
+            onClick={getLocation}
+            disabled={isLoadingLocation}
+          >
+            {isLoadingLocation ? (
+              <>
+                <div className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }} />
+                Fetching location...
+              </>
+            ) : location ? (
+              <>
+                📍 Location: {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+                <span style={{ marginLeft: '8px', color: 'var(--green)', fontSize: '0.85rem' }}>✓</span>
+              </>
+            ) : (
+              '📍 Use My Location'
+            )}
           </button>
         </div>
 
@@ -236,7 +291,7 @@ export default function EmergencyInput({ onResult }) {
           {isLoading ? (
             <>
               <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
-              Analyzing Emergency...
+              {analysisProgress || 'Analyzing Emergency...'}
             </>
           ) : (
             '🚨 Analyze Emergency'
