@@ -200,11 +200,20 @@ async def find_nearest_hospitals(
     longitude: float,
     required_specialties: list[str],
     db=None,
-    limit: int = 5,
+    limit: int = 10,
+    max_distance_km: float = 50.0,
 ) -> list[dict]:
     """
     Find and rank nearest hospitals using 7-factor ML scoring.
     Sources: OSM cache (10,000+) → static fallback (500) → DB → demo.
+    
+    Args:
+        latitude: User's latitude
+        longitude: User's longitude
+        required_specialties: Required specialties list
+        db: Database session
+        limit: Maximum number of hospitals to return (default: 10)
+        max_distance_km: Maximum distance in km to search (default: 50km)
     """
     from app.services.scoring_cache import get_cached_scores, set_cached_scores
 
@@ -212,17 +221,31 @@ async def find_nearest_hospitals(
     cached = await get_cached_scores(latitude, longitude, required_specialties)
     if cached:
         logger.debug("Returning scored hospitals from cache")
-        return cached[:limit]
+        # Filter by max distance
+        filtered = [h for h in cached if h.get("distance_km", 999) <= max_distance_km]
+        return filtered[:limit]
 
     # ── Fetch hospital pool ──────────────────────────────────────────────
     hospitals_raw = await _load_hospitals(latitude, longitude, db)
 
-    # Pre-compute distances so we can pre-filter to nearest 20 before network calls
+    # Pre-compute distances and filter by max distance FIRST
+    nearby_hospitals = []
     for h in hospitals_raw:
         if "distance_km" not in h:
             h["distance_km"] = round(_haversine(latitude, longitude, h["latitude"], h["longitude"]), 2)
-    hospitals_raw.sort(key=lambda h: h["distance_km"])
-    candidates = hospitals_raw[:20]  # only enrich nearest 20 hospitals
+        if h["distance_km"] <= max_distance_km:
+            nearby_hospitals.append(h)
+    
+    if not nearby_hospitals:
+        logger.warning(f"No hospitals found within {max_distance_km}km of ({latitude}, {longitude})")
+        # Expand search radius if nothing found
+        max_distance_km = 100.0
+        nearby_hospitals = [h for h in hospitals_raw if h.get("distance_km", 999) <= max_distance_km]
+    
+    logger.info(f"Found {len(nearby_hospitals)} hospitals within {max_distance_km}km")
+    
+    nearby_hospitals.sort(key=lambda h: h["distance_km"])
+    candidates = nearby_hospitals[:30]  # only enrich nearest 30 hospitals
 
     # ── Fetch async enhancements with a global 2-second timeout ──────────
     try:
@@ -242,8 +265,8 @@ async def find_nearest_hospitals(
     availability_data = availability_data if isinstance(availability_data, dict) else {}
     acceptance_rates = acceptance_rates if isinstance(acceptance_rates, dict) else {}
 
-    # ── Add ETA to all hospitals (traffic for top-20, haversine for rest) ──
-    for h in hospitals_raw:
+    # ── Add ETA to all hospitals (traffic for top-30, haversine for rest) ──
+    for h in nearby_hospitals:
         naive_min = h["distance_km"] / 40.0 * 60.0
         h["estimated_travel_min"] = max(int(traffic_etas.get(h.get("id", ""), naive_min)), 3)
 
@@ -257,15 +280,15 @@ async def find_nearest_hospitals(
         acceptance_rates=acceptance_rates,
     )
 
-    for h in hospitals_raw:
+    for h in nearby_hospitals:
         h["_score"] = scorer.score(h)
         h["score_breakdown"] = scorer.score_breakdown(h)
         h["specialty_match"] = scorer._specialty_score(h) / 100.0
 
-    hospitals_raw.sort(key=lambda h: h["_score"], reverse=True)
+    nearby_hospitals.sort(key=lambda h: h["_score"], reverse=True)
 
     # ── Apply live availability overlay ──────────────────────────────────
-    for h in hospitals_raw:
+    for h in nearby_hospitals:
         hid = h.get("id", "")
         if hid in availability_data:
             live = availability_data[hid]
@@ -274,9 +297,9 @@ async def find_nearest_hospitals(
             h["is_accepting_patients"] = live.get("is_accepting_patients", True)
 
     # ── Cache and return ──────────────────────────────────────────────────
-    scored = hospitals_raw[:limit * 4]  # cache more for pagination
+    scored = nearby_hospitals[:limit * 4]  # cache more for pagination
     await set_cached_scores(latitude, longitude, required_specialties, scored)
-    return hospitals_raw[:limit]
+    return nearby_hospitals[:limit]
 
 
 async def _load_hospitals(lat: float, lon: float, db=None) -> list[dict]:

@@ -82,12 +82,13 @@ async def analyze_emergency(
                 longitude=lon,
                 required_specialties=firstaid_data.get("required_specialties", []),
                 db=db,
-                limit=5,
+                limit=10,  # Increased from 5 to 10
+                max_distance_km=50.0,  # Search within 50km radius
             ),
             timeout=2.0,  # Reduced from 3s to 2s
         )
     except asyncio.TimeoutError:
-        hospitals = hospital_service._demo_hospitals()[:5]
+        hospitals = hospital_service._demo_hospitals()[:10]
 
     processing_ms = round((time.time() - start_time) * 1000, 1)
 

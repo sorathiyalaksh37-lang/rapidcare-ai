@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { analyzeEmergency } from '../services/api';
 
@@ -28,6 +28,11 @@ export default function EmergencyInput({ onResult }) {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const fileInputRef = useRef(null);
+
+  // Auto-fetch location on component mount
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   // ── Location ──────────────────────────────────────────────────────────
   const getLocation = useCallback(() => {
