@@ -32,6 +32,7 @@ export default function EmergencyInput({ onResult }) {
   // Auto-fetch location on component mount
   useEffect(() => {
     getLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── Location ──────────────────────────────────────────────────────────
@@ -41,8 +42,10 @@ export default function EmergencyInput({ onResult }) {
       setError('');
       navigator.geolocation.getCurrentPosition(
         pos => {
-          setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+          const userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          setLocation(userLocation);
           setIsLoadingLocation(false);
+          console.log('Location obtained:', userLocation);
         },
         (err) => {
           setIsLoadingLocation(false);
@@ -56,6 +59,7 @@ export default function EmergencyInput({ onResult }) {
           }
           setError(errorMsg);
           // Only use default as last resort
+          console.warn('Location error, using default Mumbai location');
           setLocation({ lat: 19.0760, lng: 72.8777 }); // Default Mumbai
         },
         {
